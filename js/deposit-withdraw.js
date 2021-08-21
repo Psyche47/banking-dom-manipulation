@@ -6,24 +6,34 @@ function getInputValue(inputId) {
   return inputAmount;
 }
 
+function updateTotalField(totalFieldId, amount) {
+  const totalField = document.getElementById(totalFieldId);
+  const totalFieldText = totalField.innerText;
+  const totalFieldAmount = parseFloat(totalFieldText);
+  const newTotal = totalFieldAmount + amount;
+  totalField.innerText = newTotal;
+  return newTotal;
+}
+
+function updateBalance(amount, isAdd) {
+  const balanceTotal = document.getElementById("total-balance");
+  const balanceTotalText = balanceTotal.innerText;
+  const previousBalanceAmount = parseFloat(balanceTotalText);
+  let newBalanceTotal = 0;
+  if (isAdd == true) {
+    newBalanceTotal = previousBalanceAmount + amount;
+  } else {
+    newBalanceTotal = previousBalanceAmount - amount;
+  }
+  balanceTotal.innerText = newBalanceTotal;
+}
+
 document
   .getElementById("deposit-button")
   .addEventListener("click", function () {
     const newdepositAmount = getInputValue("deposit-input");
-    const currentDeposit = document.getElementById("total-deposit");
-    const previousDepositedText = currentDeposit.innerText;
-    const previousDepositedAmount = parseFloat(previousDepositedText);
-    const newDepositTotal = previousDepositedAmount + newdepositAmount;
-
-    currentDeposit.innerText = newDepositTotal;
-
-    //Update Account Balance
-
-    const balanceTotal = document.getElementById("total-balance");
-    const balanceTotalText = balanceTotal.innerText;
-    const previousBalanceAmount = parseFloat(balanceTotalText);
-    const newBalanceTotal = previousBalanceAmount + newdepositAmount;
-    balanceTotal.innerText = newBalanceTotal;
+    updateTotalField("total-deposit", newdepositAmount);
+    updateBalance(newdepositAmount, true);
   });
 
 //Withdraw Event Handler
@@ -32,17 +42,6 @@ document
   .getElementById("withdraw-button")
   .addEventListener("click", function () {
     const withdrawAmount = getInputValue("withdraw-input");
-    const withDrawTotal = document.getElementById("total-withdraw");
-    const previousWithDrawText = withDrawTotal.innerText;
-    const previousWithDraw = parseFloat(previousWithDrawText);
-    const newWithDrawTotal = previousWithDraw + withdrawAmount;
-    withDrawTotal.innerText = newWithDrawTotal;
-
-    // Update Balance
-    const balanceTotal = document.getElementById("total-balance");
-    const previousBalanceText = balanceTotal.innerText;
-    const previousBalanceAmount = parseFloat(previousBalanceText);
-    const newBalanceTotal = previousBalanceAmount - withdrawAmount;
-
-    balanceTotal.innerText = newBalanceTotal;
+    updateTotalField("total-withdraw", withdrawAmount);
+    updateBalance(withdrawAmount, false);
   });
